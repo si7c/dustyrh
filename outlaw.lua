@@ -132,7 +132,7 @@ end
 	
 
 
-
+--Player:BuffRemains(S.Inquisition) < 5
 
 
 
@@ -175,10 +175,13 @@ local function APL()
     if S.GhostlyStrike:IsReady() and not Player:IsStealthed() and Target:IsInRange(S.GhostlyStrike) and ((Player:ComboPoints() == 4 and not Player:BuffP(S.Broadside)) or (Player:ComboPoints() == 3 and Player:BuffP(S.Broadside))) then
             return S.GhostlyStrike:Cast()
     end
-    
-    if S.RolltheBones:IsReady() and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) and (RtB_BuffRemains() <= 5 or (Player:BuffP(S.LoadedDice) and RtB_Buffs() < 2) or (RtB_Buffs() < 2 and not (Player:BuffP(S.GrandMelee) or Player:BuffP(S.RuthlessPrecision)))) then
+    --(Cache.EnemiesCount[8] >= 3 and Player:BuffP(S.BladeFlurry))
+    if S.RolltheBones:IsReady() and (Cache.EnemiesCount[8] < 3 or not Player:BuffP(S.BladeFlurry)) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) and ((RtB_BuffRemains() <= 5 and (RtB_Buffs() < 2 or ((Player:BuffP(S.GrandMelee) and  Player:BuffRemains(S.GrandMelee) <= 5) or (Player:BuffP(S.RuthlessPrecision) and Player:BuffRemains(S.RuthlessPrecision) <= 5)))) or (Player:BuffP(S.LoadedDice) and RtB_Buffs() < 2) or (RtB_Buffs() < 2 and not (Player:BuffP(S.GrandMelee) or Player:BuffP(S.RuthlessPrecision)))) then
     		return S.RolltheBones:Cast()
     end
+    		    if S.RolltheBones:IsReady() and (Cache.EnemiesCount[8] >= 3 and Player:BuffP(S.BladeFlurry) and (RtB_Buffs() < 1 and RtB_BuffRemains() <= 5)) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) then
+    					return S.RolltheBones:Cast()
+   		 		end
     
     if S.BetweentheEyes:IsReady() and Player:ComboPoints() >= 5 and Player:BuffP(S.RuthlessPrecision) and Target:IsInRange(S.BetweentheEyes) and not Player:IsStealthed() then
     		return S.BetweentheEyes:Cast()
