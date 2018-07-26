@@ -43,6 +43,7 @@ Spell.Rogue.Outlaw = {
     Vanish = Spell(1856),
     VanishBuff = Spell(11327),
     SaberSlashV = Spell(224807),
+    Shivv = Spell(248744),
     -- Talents
     Alacrity = Spell(193539),
     AlacrityBuff = Spell(193538),
@@ -137,7 +138,15 @@ end
 
 
 local function APL()
+    LeftCtrl = IsLeftControlKeyDown();
+    LeftShift = IsLeftShiftKeyDown();
     if not Player:AffectingCombat() then
+    if LeftShift and S.BladeFlurry:IsReady() then
+        return S.BladeFlurry:Cast()
+    end
+    if LeftCtrl and S.KillingSpree:IsReady() then
+        return S.KillingSpree:Cast()
+    end  
         return 462338
     end
     HL.GetEnemies("Melee");
@@ -145,20 +154,26 @@ local function APL()
     HL.GetEnemies(10, true);
     HL.GetEnemies(11, true);
     
-    
-    
-    
-    
+    if LeftShift and S.BladeFlurry:IsReady() then
+        return S.BladeFlurry:Cast()
+    end
+    if LeftCtrl and S.KillingSpree:IsReady() then
+        return S.KillingSpree:Cast()
+    end  
+ 
     
 --ROT START
-
-	if RubimRH.AoEON() and RubimRH.CDsON() and S.KillingSpree:IsReady() and Cache.EnemiesCount[8] >= 2 and Player:BuffP(S.BladeFlurry) then
-    		return S.KillingSpree:Cast()
-    end
+	--if RubimRH.AoEON() and RubimRH.CDsON() and S.KillingSpree:IsReady() and Cache.EnemiesCount[8] >= 2 and Player:BuffP(S.BladeFlurry) then
+    		--return S.KillingSpree:Cast()
+    --end
     
-    if RubimRH.AoEON() and S.BladeFlurry:IsReady() and Cache.EnemiesCount[8] >= 2 and not Player:BuffP(S.BladeFlurry) then
-    		return S.BladeFlurry:Cast()
-    end
+    --if RubimRH.AoEON() and S.BladeFlurry:IsReady() and Cache.EnemiesCount[8] >= 2 and not Player:BuffP(S.BladeFlurry) then
+    		--return S.BladeFlurry:Cast()
+    --end
+    
+    --if S.BladeFlurry:IsCastable() and S.BladeFlurry:Queue() then
+            --return S.BladeFlurry:Cast()
+    --end
     
     if S.Ambush:IsReady() and Target:IsInRange(S.Ambush) and Player:IsStealthed() then
     		return S.Ambush:Cast()
@@ -176,27 +191,27 @@ local function APL()
             return S.GhostlyStrike:Cast()
     end
     --(Cache.EnemiesCount[8] >= 3 and Player:BuffP(S.BladeFlurry))
-    if S.RolltheBones:IsReady() and (Cache.EnemiesCount[8] < 3 or not Player:BuffP(S.BladeFlurry)) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) and ((RtB_BuffRemains() <= 5 and (RtB_Buffs() < 2 or ((Player:BuffP(S.GrandMelee) and  Player:BuffRemains(S.GrandMelee) <= 5) or (Player:BuffP(S.RuthlessPrecision) and Player:BuffRemains(S.RuthlessPrecision) <= 5)))) or (Player:BuffP(S.LoadedDice) and RtB_Buffs() < 2) or (RtB_Buffs() < 2 and not (Player:BuffP(S.GrandMelee) or Player:BuffP(S.RuthlessPrecision)))) then
+    if S.RolltheBones:IsReady() and (Cache.EnemiesCount[8] < 3 or not Player:BuffP(S.BladeFlurry)) and (Player:ComboPoints() >= 5 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside) and Player:BuffP(S.Opportunity)) or (Player:ComboPoints() >= 4 and (Player:BuffP(S.Broadside) or Player:BuffP(S.Opportunity)))) and ((RtB_BuffRemains() <= 3 and (RtB_Buffs() < 2 or ((Player:BuffP(S.GrandMelee) and  Player:BuffRemains(S.GrandMelee) <= 3) or (Player:BuffP(S.RuthlessPrecision) and Player:BuffRemains(S.RuthlessPrecision) <= 3)))) or (Player:BuffP(S.LoadedDice) and RtB_Buffs() < 2) or (RtB_Buffs() < 2 and not (Player:BuffP(S.GrandMelee) or Player:BuffP(S.RuthlessPrecision)))) then
     		return S.RolltheBones:Cast()
     end
-    		    if S.RolltheBones:IsReady() and (Cache.EnemiesCount[8] >= 3 and Player:BuffP(S.BladeFlurry) and (RtB_Buffs() < 1 and RtB_BuffRemains() <= 5)) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) then
+    		    if S.RolltheBones:IsReady() and (Cache.EnemiesCount[8] >= 3 and Player:BuffP(S.BladeFlurry) and (RtB_Buffs() < 1 and RtB_BuffRemains() <= 3)) and (Player:ComboPoints() >= 5 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside) and Player:BuffP(S.Opportunity)) or (Player:ComboPoints() >= 4 and (Player:BuffP(S.Broadside) or Player:BuffP(S.Opportunity)))) then
     					return S.RolltheBones:Cast()
    		 		end
     
     if S.BetweentheEyes:IsReady() and Player:ComboPoints() >= 5 and Player:BuffP(S.RuthlessPrecision) and Target:IsInRange(S.BetweentheEyes) and not Player:IsStealthed() then
     		return S.BetweentheEyes:Cast()
     end
-    			if S.BetweentheEyes:IsReady() and I.GreenskinsWaterloggedWristcuffs:IsEquipped() and Player:ComboPoints() >= 5 then
+    			if S.BetweentheEyes:IsReady() and I.GreenskinsWaterloggedWristcuffs:IsEquipped() and not Player:IsStealthed() and Player:ComboPoints() >= 5 then
     					return S.BetweentheEyes:Cast()
    		 		end
     
-    if S.RunThrough:IsReady() and not I.GreenskinsWaterloggedWristcuffs:IsEquipped() and not Player:BuffP(S.RuthlessPrecision) and not Player:IsStealthed() and Target:IsInRange(S.RunThrough) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) then
+    if S.RunThrough:IsReady() and not I.GreenskinsWaterloggedWristcuffs:IsEquipped() and not Player:BuffP(S.RuthlessPrecision) and not Player:IsStealthed() and Target:IsInRange(S.RunThrough) and (Player:ComboPoints() >= 5 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside) and Player:BuffP(S.Opportunity)) or (Player:ComboPoints() >= 4 and (Player:BuffP(S.Broadside) or (Player:BuffP(S.Opportunity))))) then
             return S.RunThrough:Cast()
     end
-    		    if S.RunThrough:IsReady() and not S.BetweentheEyes:CooldownUp() and not Player:IsStealthed() and Target:IsInRange(S.RunThrough) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) then
+    		    if S.RunThrough:IsReady() and not S.BetweentheEyes:CooldownUp() and not Player:IsStealthed() and Target:IsInRange(S.RunThrough) and (Player:ComboPoints() >= 5 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside) and Player:BuffP(S.Opportunity)) or (Player:ComboPoints() >= 4 and (Player:BuffP(S.Broadside) or Player:BuffP(S.Opportunity)))) then
             			return S.RunThrough:Cast()
    				end
-   						if S.RunThrough:IsReady() and I.GreenskinsWaterloggedWristcuffs:IsEquipped() and not S.BetweentheEyes:CooldownUp() and not Player:IsStealthed() and Target:IsInRange(S.RunThrough) and (Player:ComboPoints() >= 4 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside))) then
+   						if S.RunThrough:IsReady() and I.GreenskinsWaterloggedWristcuffs:IsEquipped() and not S.BetweentheEyes:CooldownUp() and not Player:IsStealthed() and Target:IsInRange(S.RunThrough) and (Player:ComboPoints() >= 5 or (Player:ComboPoints() >= 3 and Player:BuffP(S.Broadside) and Player:BuffP(S.Opportunity)) or (Player:ComboPoints() >= 4 and (Player:BuffP(S.Broadside) or Player:BuffP(S.Opportunity)))) then
             					return S.RunThrough:Cast()
    					    end
     
@@ -206,7 +221,7 @@ local function APL()
     	        if not Target:IsInRange(S.SaberSlash) and not Player:IsStealthed() and S.PistolShot:IsReady(20) and not Player:IsStealthed() and Player:EnergyDeficitPredicted() < 25 and (Player:ComboPointsDeficit() >= 1 or EnergyTimeToMaxRounded() <= 1.2) then
             			return S.PistolShot:Cast()
             	end
-            			if S.PistolShot:IsReady() and not Player:IsStealthed() and Target:IsInRange(S.PistolShot) and Player:ComboPointsDeficit() >= 1 and Player:BuffP(S.GreenskinsWaterloggedWristcuffs) then
+            			if S.PistolShot:IsReady() and not Player:IsStealthed() and Target:IsInRange(S.PistolShot) and (Player:ComboPointsDeficit() >= 2 or (Player:ComboPointsDeficit() >= 1 and not Player:BuffP(S.Opportunity))) and Player:BuffP(S.GreenskinsWaterloggedWristcuffs) and S.BetweentheEyes:CooldownRemains() < Player:GCD() * 2 then
             					return S.PistolShot:Cast()
     					end
     
